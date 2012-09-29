@@ -1,11 +1,23 @@
 #[accountManager.js]
 
-####Dead Simple account management in Node.js with the following features:
+#####EARLY BETA, may undergo substantial API changes
+
+####A simple module to add a simple account management API and user model to your project, with multiple databases supported: 
+
+accountManager.js
+* couchDB (semi-working)
+* redis (planned)
+* riak (planned)
+* mongo (planned)
+* mySQL (planned)
+* ....and any others people would like to add (submit pull requests!)
+
+####The following features are included:
 
 * New User Account Creation
 * Secure Password Reset via Email
 * Ability to Update / Delete Account
-* Blowfish-based Scheme Password Encryption
+* Blowfish-based Scheme Password Encryption (only stores hashes in database)
 
 ***
 

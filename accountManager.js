@@ -15,8 +15,6 @@ switch(config.type){
 	break;
 	case 'riak': var DB = require('./databaseMiddleware/riak/riakTheBoat.js')
 	break;
-	case 'couch': var DB = require('./databaseMiddleware/couchDB/stuffInACouch.js')
-	break;
 }
 	
 
