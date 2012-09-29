@@ -1,0 +1,19 @@
+{
+  "name": "accountManager",
+  "scripts": {
+    "start": "accountManager.js"
+  },
+  "version": "0.0.1",
+  "engines": {
+    "node": "0.8.x"
+  },
+  "dependencies": {
+    "redis": "*",
+    "nano" : "*",
+    "commander": "*",
+    "util": "*",
+    "bcrypt" : "*",
+    "moment" : "*",
+    "chai":"*"
+  }
+}
