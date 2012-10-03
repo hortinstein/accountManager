@@ -85,13 +85,13 @@ AM.signup = function(newData, callback)
 
 AM.update = function(newData, callback)
 {
-	if (newData.pass == ''){
-		DB.update(newData,callback);
-	}else{
+	if (newData.hasOwnProperty('pass')){
 		AM.saltAndHash(newData.pass, function(hash){
 			newData.pass = hash;
 			DB.update(newData,callback);
 		});
+	}else{
+		DB.update(newData)
 	}
 };
 

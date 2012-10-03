@@ -14,21 +14,23 @@ module.exports = DB;
 
 
 
-DB.update = function  (record,callback) {
-	client = DB.nano.use(config.database_name); //sets it to the right database
-	client.get(record.username, function (e,r) {
+DB.update = function  (newData,callback) {
+	var client = DB.nano.use(config.database_name); //sets it to the right database
+	if (newData.username === null){
+		callback('no username');
+	}
+	client.get(newData.username, function (e,r) {
 		if(e) {
 	    	callback(e.error);
-	    	return;
 	    }
-	    record.pass == '' ? r.pass = r.pass : r.pass = record.pass; // if it is given '' ignore the changes
-		r.email = record.email;
-	    //record._rev = r.rev;//adds revision so it can be inserted into couch
-	    client.insert(r, r.username, r.rev, function (e, r) {
+	    for (var attrname in newData) { 
+	    	r[attrname] = newData[attrname]; 
+	    }
+	    client.insert(r, r.username, function (e, r) {
     		if(e) {
     			callback(e);
     		} else {
-    			callback(null,'ok');
+    			callback(null,r); //success!
     		}
 		});
 	});
@@ -37,14 +39,14 @@ DB.update = function  (record,callback) {
 
 
 DB.insert = function  (record,callback) {
-	client = DB.nano.use(config.database_name); //sets it to the right database
+	var client = DB.nano.use(config.database_name); //sets it to the right database
 	client.insert(record, record.username, function(e, body){
 		if (e) { //if error means document already exists in database
 			//console.log('...stuffInACouch.js: username already exists', e.message);
-			callback('record_exists');
+			callback(e,'record_exists');
 		} else {
 			//console.log('...stuffInACouch.js: ', record.username, 'successfully created'); //success!
-			callback('ok');
+			callback(null,'ok');
 		}
 	});
 }
@@ -52,7 +54,7 @@ DB.insert = function  (record,callback) {
 //getByUsername
 //in: username, callback 
 DB.getByUsername = function  (username, callback) {
-	client = DB.nano.use(config.database_name); //sets it to the right database
+	var client = DB.nano.use(config.database_name); //sets it to the right database
 	
 	client.get(username, function (e,r) {
 		if (e){
@@ -69,7 +71,7 @@ DB.getByUsername = function  (username, callback) {
 //getByEmail
 //in: username, callback 
 DB.getByEmail = function  (email, callback) {
-	client = DB.nano.use(config.database_name); //sets it to the right database
+	var client = DB.nano.use(config.database_name); //sets it to the right database
 	
 	client.view('userAccount','email', {key: email}, function(e, r){ //checks to see if email is already registered
 		if (r === null)
@@ -91,14 +93,16 @@ DB.getByEmail = function  (email, callback) {
 //sets up the Db 
 DB.buildDB = function(callback) {
 	DB.nano.db.create(config.database_name, function(err, body) {
-		client = DB.nano.use(config.database_name); //sets it to the right database
+		var client = DB.nano.use(config.database_name); //sets it to the right database
 		if (err) {
-			console.log('...stuffInACouch: database already created! ' + err);
+			//console.log('...stuffInACouch: database already created! ' + err);
 			utility.buildViews(client);
+			callback(null);
 		}
 		else {
-			console.log('...stuffInACouch: created database, loading views');
+			//console.log('...stuffInACouch: created database, loading views');
 			utility.buildViews(client);
+			callback(null);
 		}
 	});
 }
@@ -106,10 +110,12 @@ DB.buildDB = function(callback) {
 DB.destroyDB = function(callback) { //because some men just want to watch the world burn
 	DB.nano.db.destroy(config.database_name, function(err, body) {
 		if (err) {
-			console.log('...stuffInACouch: database not destroyed!' + err);
+			//console.log('...stuffInACouch: database not destroyed!' + err);
+			callback(err);
 		}
 		else {
-			console.log('...stuffInACouch: destroyed database');
+			//console.log('...stuffInACouch: destroyed database');
+			callback(null);
 		}
 	});
 };

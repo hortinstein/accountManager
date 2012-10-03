@@ -14,10 +14,10 @@ utils.buildViews = function(client){
 		}
 	}, '_design/userAccount', function (e, response) {
 		if (e) {
-			console.log('...buildACouch: view exists!' + e);
+			//console.log('...buildACouch: view exists!' + e);
 		}
 		else {
-			console.log("...buildACouch: email view inserted");
+			//console.log("...buildACouch: email view inserted");
 		}
 		
 	});
