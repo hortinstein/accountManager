@@ -1,11 +1,12 @@
 var utility = require("./utility.js"); //store for functions not in the standard template
 
-
 var DB = {}; //object to export that will contain all of the templated functions 
 
 var userpass= '';
 var username = '';
 var	database_name = '';
+var callback = '';
+var cookies = '';
 
 DB.setup = function  (config) {
 	DB.nano = require('nano')(config.couch_host)
