@@ -1,7 +1,7 @@
 var should = require('should');
 
-try { var config = require('../config.json');} //load config from root dir 
-catch (err) {console.log("...accountManager.js: no config",err );};
+try { var config = require('./test_config.json');} //load config from root dir 
+catch (err) {console.log("...test: no test_config.js",err );};
 
 
 
@@ -24,6 +24,7 @@ var user_update ={	email:'randos@gmail.com',
 					pass: 'rabbi123'}
 describe('Database Driver tests:', function() {
 	before(function(done) {
+        DB.setup(config);
     	DB.buildDB(done); //builds the database
     });
 

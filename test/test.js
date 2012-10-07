@@ -3,6 +3,11 @@ var should = require('should');
 
 require('./databaseTest.js'); //runs through the database tests
 
+
+try { var config = require('./test_config.json');} //load config from root dir 
+catch (err) {console.log("...test: no test_config.js",err );};
+
+
 var AM = require('../accountManager.js'); //runs through the database tests
 
 var user =          { email:'rando@gmail.com', 
@@ -12,9 +17,9 @@ var user_update =   { email:'randos@gmail.com',
                       username: 'rando', 
                       pass: 'rabbi123'      }
 
-
 describe('accountManager Tests:', function() {
     before(function(done) {
+        AM.setup(config);
         AM.buildDB(done); //builds the database
     });
 

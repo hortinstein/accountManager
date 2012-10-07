@@ -1,21 +1,26 @@
 var utility = require("./utility.js"); //store for functions not in the standard template
 
-try { var config = require('./../../config.json');} //loads the config file
-catch (err) {console.log("...accountManager.js: no config" );};
 
 var DB = {}; //object to export that will contain all of the templated functions 
 
-DB.nano = require('nano')(config.couch_host)
-  , username = config.couch_user
-  , userpass = config.couch_pass
-  , callback = console.log // this would normally be some callback
-  , cookies  = {}; // store cookies, normally redis or something
+var userpass= '';
+var username = '';
+var	database_name = '';
+
+DB.setup = function  (config) {
+	DB.nano = require('nano')(config.couch_host)
+	  , username = config.couch_user
+	  , userpass = config.couch_pass
+	  , callback = console.log // this would normally be some callback
+	  , cookies  = {}; // store cookies, normally redis or something
+	database_name = config.database_name
+}
 module.exports = DB;
 
 
 
 DB.update = function  (newData,callback) {
-	var client = DB.nano.use(config.database_name); //sets it to the right database
+	var client = DB.nano.use(database_name); //sets it to the right database
 	if (newData.username === null){
 		callback('no username');
 	}
@@ -39,7 +44,7 @@ DB.update = function  (newData,callback) {
 
 
 DB.insert = function  (record,callback) {
-	var client = DB.nano.use(config.database_name); //sets it to the right database
+	var client = DB.nano.use(database_name); //sets it to the right database
 	client.insert(record, record.username, function(e, body){
 		if (e) { //if error means document already exists in database
 			//console.log('...stuffInACouch.js: username already exists', e.message);
@@ -54,7 +59,7 @@ DB.insert = function  (record,callback) {
 //getByUsername
 //in: username, callback 
 DB.getByUsername = function  (username, callback) {
-	var client = DB.nano.use(config.database_name); //sets it to the right database
+	var client = DB.nano.use(database_name); //sets it to the right database
 	
 	client.get(username, function (e,r) {
 		if (e){
@@ -71,7 +76,7 @@ DB.getByUsername = function  (username, callback) {
 //getByEmail
 //in: username, callback 
 DB.getByEmail = function  (email, callback) {
-	var client = DB.nano.use(config.database_name); //sets it to the right database
+	var client = DB.nano.use(database_name); //sets it to the right database
 	
 	client.view('userAccount','email', {key: email}, function(e, r){ //checks to see if email is already registered
 		if (r === null)
@@ -92,8 +97,8 @@ DB.getByEmail = function  (email, callback) {
 
 //sets up the Db 
 DB.buildDB = function(callback) {
-	DB.nano.db.create(config.database_name, function(err, body) {
-		var client = DB.nano.use(config.database_name); //sets it to the right database
+	DB.nano.db.create(database_name, function(err, body) {
+		var client = DB.nano.use(database_name); //sets it to the right database
 		if (err) {
 			//console.log('...stuffInACouch: database already created! ' + err);
 			utility.buildViews(client);
@@ -108,7 +113,7 @@ DB.buildDB = function(callback) {
 }
 //destroy the DB created by accountManager
 DB.destroyDB = function(callback) { //because some men just want to watch the world burn
-	DB.nano.db.destroy(config.database_name, function(err, body) {
+	DB.nano.db.destroy(database_name, function(err, body) {
 		if (err) {
 			//console.log('...stuffInACouch: database not destroyed!' + err);
 			callback(err);

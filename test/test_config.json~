@@ -1,0 +1,12 @@
+{
+	"type": "couch",
+	"database_name": "predditor_user_records",
+	"couch_host": "http://127.0.0.1:5984",
+	"couch_host_r": "http://predditor:apredditorsitsonalinuxcouch@nodejitsudb792897988073.iriscouch.com:5984",
+  	"couch_user": "predditor",
+  	"couch_pass":"apredditorsitsonalinuxcouch",
+
+  	"redis_host": "clingfish.redistogo.com",
+  	"redis_port": "9451",
+  	"redis_pass": "5dd43ca03f9af3b0fdaa2822ae2c257a" 
+}
