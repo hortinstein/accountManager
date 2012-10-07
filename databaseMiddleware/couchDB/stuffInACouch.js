@@ -30,7 +30,7 @@ DB.update = function  (newData,callback) {
     		if(e) {
     			callback(e);
     		} else {
-    			callback(null,r); //success!
+    			callback(null,'ok'); //success!
     		}
 		});
 	});

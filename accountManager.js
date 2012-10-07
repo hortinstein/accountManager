@@ -23,15 +23,33 @@ var AM = {};
 module.exports = AM;
 
 // logging in //
+AM.getByUsername = function  (user,callback) {
+	DB.getByUsername(user,function  (e,o) {
+		if (o){
+			callback(null,o);
+		}	else{
+			callback('user_not_found');
+		}
 
+	})
+}
+AM.getByEmail = function  (email,callback) {
+	DB.getByEmail(email,function  (e,o) {
+		if (o){
+			callback(null,o);
+		}	else{
+			callback('email_not_found');
+		}
+
+	})
+}
 AM.autoLogin = function(user, pass, callback)
 {
 	DB.getByUsername(user,function  (e,o) {
-		
 		if (o){
-			o.pass == pass ? callback(o) : callback(null);
+			o.pass === pass ? callback(null,o) : callback('invalid_password');
 		}	else{
-			callback(null);
+			callback('user_not_found');
 		}
 
 	})
@@ -40,14 +58,14 @@ AM.autoLogin = function(user, pass, callback)
 AM.manualLogin = function(user, pass, callback)
 {
 	DB.getByUsername(user,function  (e,o) {
-		if (o == null){
+		if (o === null){
 			callback('user_not_found');
 		}	else{
 			bcrypt.compare(pass, o.pass, function(e, r) {
 				if (r){
 					callback(null, o);
 				}	else{
-					callback('invalid-password');
+					callback('invalid_password');
 				}
 			});
 		}
@@ -67,7 +85,6 @@ AM.signup = function(newData, callback)
 						newData.pass = hash;
 						newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
 						DB.insert(newData,function  (e) {
-							console.log(e);
 							callback(e);
 						});
 					});
@@ -91,25 +108,37 @@ AM.update = function(newData, callback)
 			DB.update(newData,callback);
 		});
 	}else{
-		DB.update(newData)
+		DB.update(newData,callback);
 	}
 };
 
-AM.setPassword = function(email, newPass, callback)
+AM.setPassword = function(email,newPass, callback)
 {
-	// AM.accounts.findOne({email:email}, function(e, o){
-	// 	AM.saltAndHash(newPass, function(hash){
-	// 		o.pass = hash;
-	// 		AM.accounts.save(o); callback(o);
-	// 	});
-	// });
+	DB.getByEmail(email, function (e,r){ //tests to see if the email is already in the database
+		if (r){ //  email not found
+			AM.saltAndHash(newPass, function(hash){
+				r.pass = hash;
+				DB.insert(r,function  (e) {
+					callback(e);
+				});
+			});
+		}
+		else { 
+			callback('email_not_found');
+		}
+	});
 }
 
-AM.validateLink = function(email, passHash, callback)
+AM.validateLost = function(email, passHash, callback)
 {
-	// AM.accounts.find({ $and: [{email:email, pass:passHash}] }, function(e, o){
-	// 	callback(o ? 'ok' : null);
-	// });
+	DB.getByEmail(email, function (e,r){ //tests to see if the email is already in the database
+		if (e){ //  email not found
+			callback(e);
+		}
+		else { 
+			r.pass === passHash ? callback(null,r) : callback("invalid");
+		}
+	});
 }
 
 AM.saltAndHash = function(pass, callback)
@@ -126,21 +155,14 @@ AM.delete = function(id, callback)
 
 }
 
-// auxiliary methods //
+//debug fuctions
 
+AM.buildDB = function(callback)
+{
+	DB.buildDB(callback)
+}
 
-//DB.buildDB();
-//DB.destroyDB();
-//testing signup
-// AM.signup({email:'hortsassdnasasdasdasddstein@gmail.com', username: 'hasdassadortinddasdsdsteins', pass: 'woots'},function (e,r) {
-//  	console.log(e);
-//  });
- AM.update({email:'hortinstein@gmail.com', username: 'hasdassadortinddasdsdsteins', pass: 'woots'},function (e,r) {
-   	console.log(e);
- });
-// DB.getByEmail('a@gmail.com',function (e,r) {
-// 	console.log(e,r);
-// });
-AM.manualLogin('hasdassadortinddasdsdsteins', 'woots',function (e,r) {
-	console.log(e,r);
-});
+AM.destroyDB = function(callback)
+{
+	DB.destroyDB(callback)
+}

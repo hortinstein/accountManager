@@ -24,7 +24,7 @@ var user_update ={	email:'randos@gmail.com',
 					pass: 'rabbi123'}
 describe('Database Driver tests:', function() {
 	before(function(done) {
-    DB.buildDB(done); //builds the database
+    	DB.buildDB(done); //builds the database
     });
 
     it('should be able to DB.insert', function(done){
@@ -54,7 +54,7 @@ describe('Database Driver tests:', function() {
 
     it('should be able to DB.getByEmail with the new email', function(done){
     	DB.getByEmail(user_update.email,function (e,r){
-    		r.email.should.equal(user_update.email);
+            r.email.should.equal(user_update.email);
     		done();
     	});
     });

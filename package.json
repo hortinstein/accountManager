@@ -1,7 +1,8 @@
 {
   "name": "accountManager",
   "scripts": {
-    "start": "accountManager.js"
+    "start": "accountManager.js",
+    "test": "mocha test/test.js"
   },
   "version": "0.0.1",
   "engines": {
