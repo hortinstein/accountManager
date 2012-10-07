@@ -31,12 +31,12 @@ accountManager.js
 * [Mocha](http://visionmedia.github.com/mocha/) - Amazing testing library
 * [Nano](https://github.com/dscape/nano) - Thin couchDB wrapper
 * [should.js](https://github.com/visionmedia/should.js) - BDD style test assertions
-***
+
 
 ####Installation & Setup
 This assumes you already have node.js, npm, and different databases installed.  
 
-1) Put a config.json in the root folder of the module 
+1) Put a config.json in the root folder of the module, check the tests, until I can write some good documentation the test file is the best bet
 ```
 {
 	"type": "couch",
@@ -46,4 +46,5 @@ This assumes you already have node.js, npm, and different databases installed.
   	"couch_pass":"PASS",
 
 }
+
 ```
