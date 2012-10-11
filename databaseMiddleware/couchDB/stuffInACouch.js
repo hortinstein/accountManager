@@ -8,6 +8,8 @@ var	database_name = '';
 var callback = '';
 var cookies = '';
 
+module.exports = DB;
+
 DB.setup = function  (config) {
 	DB.nano = require('nano')(config.couch_host)
 	  , username = config.couch_user
@@ -16,9 +18,6 @@ DB.setup = function  (config) {
 	  , cookies  = {}; // store cookies, normally redis or something
 	database_name = config.database_name
 }
-module.exports = DB;
-
-
 
 DB.update = function  (newData,callback) {
 	var client = DB.nano.use(database_name); //sets it to the right database

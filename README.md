@@ -6,7 +6,7 @@
 
 accountManager.js
 * couchDB (working)
-* redis (planned)
+* redis (15/16 tests passed, not updating the passwords correctly)
 * riak (planned)
 * mongo (planned)
 * mySQL (planned)
