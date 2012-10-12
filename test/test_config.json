@@ -1,5 +1,5 @@
 {
-	"type": "redis",
+	"type": "couch",
 	"database_name": "test_user_records",
 	"couch_host": "http://127.0.0.1:5984",
 	"redis_host": "127.0.0.1",

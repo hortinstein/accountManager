@@ -118,7 +118,8 @@ AM.setPassword = function(email,newPass, callback)
 		if (r){ //  email not found
 			AM.saltAndHash(newPass, function(hash){
 				r.pass = hash;
-				DB.insert(r,function  (e) {
+				DB.update(r,function  (e) {
+					console.log(e);
 					callback(e);
 				});
 			});

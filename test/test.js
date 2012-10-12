@@ -76,8 +76,7 @@ describe('accountManager Tests:', function() {
     });
     it('should be able to update password', function  (done) {
         AM.setPassword(user_update.email, 'jesus', function  (e) {
-            
-            AM.manualLogin(user.username,'jesus', function(e,r){
+            AM.manualLogin(user_update.username,'jesus', function(e,r){
                 r.email.should.equal(user_update.email);
             done();
             });
