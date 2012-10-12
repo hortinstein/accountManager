@@ -22,11 +22,13 @@ DB.setup = function  (config) {
 DB.update = function  (newData,callback) {
 	var client = DB.nano.use(database_name); //sets it to the right database
 	if (newData.username === null){
-		callback('no username');
+		callback('user_not_found');
 	}
 	client.get(newData.username, function (e,r) {
-		if(e) {
-	    	callback(e.error);
+
+		if(r === undefined) {
+	    	callback('user_not_found');
+	    	return;
 	    }
 	    for (var attrname in newData) { 
 	    	r[attrname] = newData[attrname]; 
@@ -48,7 +50,7 @@ DB.insert = function  (record,callback) {
 	client.insert(record, record.username, function(e, body){
 		if (e) { //if error means document already exists in database
 			//console.log('...stuffInACouch.js: username already exists', e.message);
-			callback(e,'record_exists');
+			callback('record_exists');
 		} else {
 			//console.log('...stuffInACouch.js: ', record.username, 'successfully created'); //success!
 			callback(null,'ok');
@@ -64,7 +66,7 @@ DB.getByUsername = function  (username, callback) {
 	client.get(username, function (e,r) {
 		if (e){
 			//console.log('...stuffInACouch.js: account ',e.error);
-			callback(e.error,null);
+			callback('user_not_found',null);
 		}
 		else{
 			//console.log('...stuffInACouch.js: account found');
@@ -81,11 +83,11 @@ DB.getByEmail = function  (email, callback) {
 	client.view('userAccount','email', {key: email}, function(e, r){ //checks to see if email is already registered
 		if (r === null)
 		{
-			callback(e, null);
+			callback('user_not_found', null);
 		}
 		else if((r.rows).length === 0) //email already exists
 		{
-			callback(null,null);
+			callback('user_not_found',null);
 		}
 		else //email already exists
 		{

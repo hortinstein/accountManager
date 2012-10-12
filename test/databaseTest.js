@@ -31,12 +31,24 @@ describe('Database Driver tests:', function() {
     it('should be able to DB.insert', function(done){
     	DB.insert(user,done);
     });
+    it('should return record_exists error if the record exists', function(done){
+        DB.insert(user, function(e,r) {
+            e.should.equal('record_exists');
+            done();
+        });
+    });
 
     it('should be able to DB.getByUsername', function(done){
     	DB.getByUsername(user.username,function (e,r){
     		r.username.should.equal(user.username);
     		done();
     	});
+    });
+    it('should fail to get a user if the user is not in the database', function(done){
+        DB.getByUsername("lulstar",function (e,r){
+            e.should.equal('user_not_found');
+            done();
+        });
     });
 
     it('should be able to DB.getByEmail', function(done){
@@ -45,12 +57,24 @@ describe('Database Driver tests:', function() {
     		done();
     	});
     });
+    it('should fail if trying to get an email that is not there', function(done){
+        DB.getByEmail("fsdfasdf",function (e,r){
+            e.should.equal('user_not_found');
+            done();
+        });
+    });
 
     it('should be able to DB.update', function(done){
      	DB.update(user_update,function (e,r){
     		//r.email.should.equal(user_update.email);
     		done();
     	});
+    });
+    it('should fail if trying to update a user that is not there', function(done){
+        DB.update({username:'hee',pass:'sd'},function (e,r){
+            e.should.equal('user_not_found');
+            done();
+        });
     });
 
     it('should be able to DB.getByEmail with the new email', function(done){

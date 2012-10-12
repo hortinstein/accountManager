@@ -32,7 +32,7 @@ DB.update = function  (newData,callback) {
 			callback(null,'ok');
 
 		} else {
-			callback('record_not_found');
+			callback('user_not_found');
 		}
 	});
 }
@@ -63,8 +63,8 @@ DB.getByUsername = function  (username, callback) {
 	// var client = DB.nano.use(database_name); //sets it to the right database
 	var recordKey = database_name+":"+username;
 	redisClient.hgetall(recordKey,function(e,r) {
-		if(e){
-			callback(e)
+		if(r === null){
+			callback('user_not_found')
 		}
 		else{
 			callback(null,r);
@@ -80,12 +80,12 @@ DB.getByEmail = function  (email, callback) {
 	redisClient.get(recordKey,function(e,r) {
 		recordKey = database_name+":"+r;
 		if(!r){
-			callback('not_found',null);
+			callback('user_not_found',null);
 		}
 		else{
 			redisClient.hgetall(recordKey,function(e,r) {
 				if(e){
-					callback('note_found',null);
+					callback('user_not_found',null);
 				}
 				else{
 					callback(null,r);

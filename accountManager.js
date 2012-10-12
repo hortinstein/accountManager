@@ -73,12 +73,10 @@ AM.manualLogin = function(user, pass, callback)
 	})
 }
 
-
-
 AM.signup = function(newData, callback)
 {
 	DB.getByUsername(newData.username, function  (e,r) { //tests to see if the user is already listed in the database
-		if (r === null){ //username not found
+		if (e === 'user_not_found'){ //username not found
 			DB.getByEmail(newData.email, function (e,r){ //tests to see if the email is already in the database
 				if (r === null){ //  email not found
 					AM.saltAndHash(newData.pass, function(hash){
@@ -119,7 +117,6 @@ AM.setPassword = function(email,newPass, callback)
 			AM.saltAndHash(newPass, function(hash){
 				r.pass = hash;
 				DB.update(r,function  (e) {
-					console.log(e);
 					callback(e);
 				});
 			});

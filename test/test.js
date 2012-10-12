@@ -17,7 +17,7 @@ var user_update =   { email:'randos@gmail.com',
                       username: 'rando', 
                       pass: 'rabbi123'      }
 
-describe('accountManager Tests:', function() {
+describe('accountManager Tests:', function () {
     before(function(done) {
         AM.setup(config);
         AM.buildDB(done); //builds the database
