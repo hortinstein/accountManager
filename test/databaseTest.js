@@ -12,7 +12,7 @@ switch(config.type){
 	break;
 	case 'mongo': var DB = require('../databaseMiddleware/mongoDB/iAmAGoldenMongod.js')
 	break;
-	case 'riak': var DB = require('../databaseMiddleware/riak/riakTheBoat.js')
+	case 'riak': var DB = require('../databaseMiddleware/riak/riakTheSlit.js')
 	break;
 }
 

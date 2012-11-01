@@ -15,7 +15,7 @@ AM.setup = function  (config,callback) {
 		break;
 		case 'mongo':  DB = require('./databaseMiddleware/mongoDB/iAmAGoldenMongod.js')
 		break;
-		case 'riak':  DB = require('./databaseMiddleware/riak/riakTheBoat.js')
+		case 'riak':  DB = require('./databaseMiddleware/riak/riakTheSlit.js')
 		break;
 	}
 	DB.setup(config)
