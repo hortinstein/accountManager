@@ -75,6 +75,7 @@ AM.manualLogin = function(user, pass, callback)
 
 AM.signup = function(newData, callback)
 {
+	console.log(newData)
 	DB.getByUsername(newData.username, function  (e,r) { //tests to see if the user is already listed in the database
 		if (e === 'user_not_found'){ //username not found
 			DB.getByEmail(newData.email, function (e,r){ //tests to see if the email is already in the database
@@ -83,7 +84,7 @@ AM.signup = function(newData, callback)
 						newData.pass = hash;
 						newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
 						DB.insert(newData,function  (e) {
-							callback(null,"success");
+							callback(e);
 						});
 					});
 				}
@@ -141,9 +142,11 @@ AM.validateLost = function(email, passHash, callback)
 
 AM.saltAndHash = function(pass, callback)
 {
-	var salt = this.salt = bcrypt.genSaltSync(10);
-	bcrypt.hashSync(pass, salt)
-	callback(hash);
+	 bcrypt.genSalt(10, function(err, salt) {
+	 	bcrypt.hash(pass, salt, function(err, hash) {
+	 		callback(hash);
+	 	});
+	 });
 }
 
 AM.delete = function(id, callback)
