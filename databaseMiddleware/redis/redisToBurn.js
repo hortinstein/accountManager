@@ -47,7 +47,7 @@ DB.insert = function  (record,callback) {
 			callback('record_exists');
 
 		} else {
-			multi.set(database_name+":"+record.email, record.username);
+			multi.set(database_name+":"+record.email+"_E", record.username);
 			for (var attrname in record) { 
 			    multi.hset(database_name+":"+record.username, attrname,record[attrname]);
 			}
@@ -76,7 +76,7 @@ DB.getByUsername = function  (username, callback) {
 //in: username, callback 
 DB.getByEmail = function  (email, callback) {
 // var client = DB.nano.use(database_name); //sets it to the right database
-	var recordKey = database_name+":"+email;
+	var recordKey = database_name+":"+email+"_E";
 	redisClient.get(recordKey,function(e,r) {
 		recordKey = database_name+":"+r;
 		if(!r){

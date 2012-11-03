@@ -75,7 +75,6 @@ AM.manualLogin = function(user, pass, callback)
 
 AM.signup = function(newData, callback)
 {
-	console.log(newData)
 	DB.getByUsername(newData.username, function  (e,r) { //tests to see if the user is already listed in the database
 		if (e === 'user_not_found'){ //username not found
 			DB.getByEmail(newData.email, function (e,r){ //tests to see if the email is already in the database
