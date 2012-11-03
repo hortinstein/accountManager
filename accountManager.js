@@ -83,7 +83,7 @@ AM.signup = function(newData, callback)
 						newData.pass = hash;
 						newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
 						DB.insert(newData,function  (e) {
-							callback(e);
+							callback(null,"success");
 						});
 					});
 				}
