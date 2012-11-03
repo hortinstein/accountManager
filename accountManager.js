@@ -141,11 +141,9 @@ AM.validateLost = function(email, passHash, callback)
 
 AM.saltAndHash = function(pass, callback)
 {
-	 bcrypt.genSalt(10, function(err, salt) {
-	 	bcrypt.hash(pass, salt, function(err, hash) {
-	 		callback(hash);
-	 	});
-	 });
+	var salt = this.salt = bcrypt.genSaltSync(10);
+	bcrypt.hashSync(pass, salt)
+	callback(hash);
 }
 
 AM.delete = function(id, callback)
