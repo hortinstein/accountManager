@@ -24,7 +24,7 @@ DB.update = function  (newData,callback) {
 	var recordKey = database_name+":"+newData.username;
 	redisClient.exists(recordKey, function(e,r) {
 		if (r){
-			multi.set(database_name+":"+newData.email, newData.username);
+			multi.set(database_name+":"+newData.email+"_E", newData.username);
 			for (var attrname in newData) { 
 			    multi.hset(database_name+":"+newData.username, attrname,newData[attrname]);
 			}
