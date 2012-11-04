@@ -10,13 +10,15 @@ var cookies = '';
 
 module.exports = DB;
 
-DB.setup = function  (config) {
+DB.setup = function  (config,callback) {
 	DB.nano = require('nano')(config.couch_host)
 	  , username = config.couch_user
 	  , userpass = config.couch_pass
 	  , callback = console.log // this would normally be some callback
-	  , cookies  = {}; // store cookies, normally redis or something
-	database_name = config.database_name
+	  , cookies  = {} // store cookies, normally redis or something
+	  , database_name = config.database_name
+
+	callback();
 }
 
 DB.update = function  (newData,callback) {
@@ -81,7 +83,7 @@ DB.getByEmail = function  (email, callback) {
 	var client = DB.nano.use(database_name); //sets it to the right database
 	
 	client.view('userAccount','email', {key: email}, function(e, r){ //checks to see if email is already registered
-		if (r === null)
+		if (r === null || r === undefined)
 		{
 			callback('user_not_found', null);
 		}
