@@ -10,7 +10,7 @@ var cookies = '';
 
 module.exports = DB;
 
-DB.setup = function  (config,callback) {
+DB.setup = function  (config) {
 	DB.nano = require('nano')(config.couch_host)
 	  , username = config.couch_user
 	  , userpass = config.couch_pass
@@ -18,7 +18,6 @@ DB.setup = function  (config,callback) {
 	  , cookies  = {} // store cookies, normally redis or something
 	  , database_name = config.database_name
 
-	callback();
 }
 
 DB.update = function  (newData,callback) {
