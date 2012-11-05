@@ -1,0 +1,6 @@
+{
+	"type": "redis",
+	"database_name": "test_user_records",
+	"redis_host": "127.0.0.1",
+	"redis_port": "6379"
+}
