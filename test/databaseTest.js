@@ -1,28 +1,25 @@
 var should = require('should');
 
-try { var config = require('./test_config.json');} //load config from root dir 
-catch (err) {console.log("...test: no test_config.js",err );};
 
+databaseDriverTests = function(config) {
+    var user ={ email:'rando@gmail.com', 
+                username: 'rando', 
+                pass: 'rabbit123'}
+    var user_update ={  email:'randos@gmail.com', 
+                        username: 'rando', 
+                        pass: 'rabbi123'}
 
+    switch(config.type){
+        case 'couch': var DB = require('../databaseMiddleware/couchDB/stuffInACouch.js')
+        break;
+        case 'redis': var DB = require('../databaseMiddleware/redis/redisToBurn.js')
+        break;
+        case 'mongo': var DB = require('../databaseMiddleware/mongoDB/iAmAGoldenMongod.js')
+        break;
+        case 'riak': var DB = require('../databaseMiddleware/riak/riakTheSlit.js')
+        break;
+    }
 
-switch(config.type){
-	case 'couch': var DB = require('../databaseMiddleware/couchDB/stuffInACouch.js')
-	break;
-	case 'redis': var DB = require('../databaseMiddleware/redis/redisToBurn.js')
-	break;
-	case 'mongo': var DB = require('../databaseMiddleware/mongoDB/iAmAGoldenMongod.js')
-	break;
-	case 'riak': var DB = require('../databaseMiddleware/riak/riakTheSlit.js')
-	break;
-}
-
-var user ={	email:'rando@gmail.com', 
-			username: 'rando', 
-			pass: 'rabbit123'}
-var user_update ={	email:'randos@gmail.com', 
-					username: 'rando', 
-					pass: 'rabbi123'}
-describe('Database Driver tests:', function() {
 	before(function(done) {
         DB.setup(config);
     	DB.buildDB(done); //builds the database
@@ -87,9 +84,9 @@ describe('Database Driver tests:', function() {
 	 after(function(done) {
      	DB.destroyDB(done); //destroys the database
      });
-});
+};
 //clean up previous tests
 
 //create database
-
+module.export = databaseDriverTests
 
