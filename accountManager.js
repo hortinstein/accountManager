@@ -58,14 +58,17 @@ AM.autoLogin = function(user, pass, callback)
 AM.manualLogin = function(user, pass, callback)
 {
 	DB.getByUsername(user,function  (e,o) {
-		if (o === null){
-			callback('user_not_found');
-		}	else{
+
+		if (o === null || o == undefined || e === 'user_not_found')
+		{
+			callback("User not found.", false)
+		}
+		else{
 			bcrypt.compare(pass, o.pass, function(e, r) {
 				if (r){
-					callback(null, o);
+					callback(false, o);
 				}	else{
-					callback('invalid_password');
+					callback("Invalid password.", false);
 				}
 			});
 		}
