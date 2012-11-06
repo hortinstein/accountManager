@@ -1,7 +1,7 @@
 var should = require('should');
 
+databaseDriverTests = function() {
 
-databaseDriverTests = function(config) {
     var user ={ email:'rando@gmail.com', 
                 username: 'rando', 
                 pass: 'rabbit123'}

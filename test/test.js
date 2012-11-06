@@ -1,11 +1,31 @@
+var bcrypt = require('bcrypt');
+var should = require('should');
 
-require('./databaseTest.js'); //runs through the database tests
-tests = require('./accountManagerTests.js')
+var AMtests = require('./accountManagerTests.js');
+var DBtests = require('./databaseTest.js');
 
-try { var redis_config = require('./redis_test_config.json');} //load config from root dir 
+var AM = require('../accountManager.js'); //runs through the database tests
+
+
+
+////////////////////////////////////////////////////
+//
+//      redis tests
+//
+////////////////////////////////////////////////////
+try { config = require('./redis_test_config.json');} //load config from root dir 
 catch (err) {console.log("...test: no redis_test_config.js",err );};
 
+describe('REDIS: accountManager tests:', AMtests);
+describe('REDIS: database middleware tests:', AMtests);
 
-describe('accountManager Tests:', tests(redis_config));
+////////////////////////////////////////////////////
+//
+//      couch tests
+//
+////////////////////////////////////////////////////
+try { config = require('./couch_test_config.json');} //load config from root dir 
+catch (err) {console.log("...test: no couch_test_config.js",err );};
 
-//describe('accountManager Tests:', tester(couch_config));
+describe('COUCH: accountManager tests:', AMtests);
+describe('COUCH: database middleware tests:', AMtests);

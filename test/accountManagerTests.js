@@ -3,14 +3,15 @@ var should = require('should');
 
 var AM = require('../accountManager.js'); //runs through the database tests
 
-var user =          { email:'rando@gmail.com', 
+
+
+function accountManagerTests () {
+    var user =          { email:'rando@gmail.com', 
                       username: 'rando', 
                       pass: 'rabbit123'     }
-var user_update =   { email:'randos@gmail.com', 
+    var user_update =   { email:'randos@gmail.com', 
                       username: 'rando', 
                       pass: 'rabbi123'      }
-
-function tests (config) {
     before(function(done) {
         AM.setup(config);
         AM.buildDB(done); //builds the database
@@ -88,4 +89,4 @@ function tests (config) {
     });
 }
 
-module.exports = tests
+module.exports = accountManagerTests
