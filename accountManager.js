@@ -61,14 +61,14 @@ AM.manualLogin = function(user, pass, callback)
 
 		if (o === null || o == undefined || e === 'user_not_found')
 		{
-			callback("User not found.", false)
+			callback("user_not_found", false)
 		}
 		else{
 			bcrypt.compare(pass, o.pass, function(e, r) {
 				if (r){
 					callback(false, o);
 				}	else{
-					callback("Invalid password.", false);
+					callback("invalid_password", false);
 				}
 			});
 		}

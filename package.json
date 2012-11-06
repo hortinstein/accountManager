@@ -10,13 +10,16 @@
   },
   "dependencies": {
     "redis": "*",
-    "riak":"*",
-    "nano" : "*",
+    "riak": "*",
+    "nano": "*",
     "commander": "*",
     "util": "*",
-    "mocha":"*",
-    "bcrypt" : "*",
-    "moment" : "*",
-    "chai":"*"
+    "mocha": "*",
+    "bcrypt": "*",
+    "moment": "*",
+    "chai": "*"
+  },
+  "devDependencies": {
+    "should": "~1.2.1"
   }
 }
