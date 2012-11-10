@@ -18,7 +18,10 @@ AM.setup = function  (config,callback) {
 		case 'riak':  DB = require('./databaseMiddleware/riak/riakTheSlit.js')
 		break;
 	}
-	DB.setup(config)
+	DB.setup(config);
+
+	//In the odd case this is our first time running the Setup. Lets try and build the DB!
+	DB.buildDB(callback);
 
 }
 
@@ -28,7 +31,7 @@ AM.getByUsername = function  (user,callback) {
 		if (o){
 			callback(null,o);
 		}	else{
-			callback('user_not_found');
+			callback('user_not_found', false);
 		}
 
 	})
@@ -47,9 +50,9 @@ AM.autoLogin = function(user, pass, callback)
 {
 	DB.getByUsername(user,function  (e,o) {
 		if (o){
-			o.pass === pass ? callback(null,o) : callback('invalid_password');
+			o.pass === pass ? callback(null,o) : callback('invalid_password', false);
 		}	else{
-			callback('user_not_found');
+			callback('user_not_found', false);
 		}
 
 	})
