@@ -11,13 +11,13 @@ var cookies = '';
 module.exports = DB;
 
 DB.setup = function  (config) {
-	DB.nano = require('nano')(config.couch_host)
-	  , username = config.couch_user
-	  , userpass = config.couch_pass
+	couch_host = 'http://' + config.host + ':' + config.port
+	DB.nano = require('nano')(couch_host)
+	  , username = config.username
+	  , userpass = config.password
 	  , callback = console.log // this would normally be some callback
 	  , cookies  = {} // store cookies, normally redis or something
-	  , database_name = config.database_name
-
+	  , database_name = config.name
 }
 
 DB.update = function  (newData,callback) {

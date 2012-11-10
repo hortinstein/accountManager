@@ -38,7 +38,7 @@ AM.getByEmail = function  (email,callback) {
 		if (o){
 			callback(null,o);
 		}	else{
-			callback('email_not_found');
+			callback('email_not_found', false);
 		}
 
 	})

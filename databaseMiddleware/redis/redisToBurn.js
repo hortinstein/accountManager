@@ -9,9 +9,9 @@ var	database_name = '';
 
 var redisClient = '';
 DB.setup = function  (config) {
-	database_name = config.database_name;
-	redisClient = redis.createClient(config.redis_port,config.redis_host);
-	redisClient.auth(config.redis_pass, function() {
+	database_name = config.name;
+	redisClient = redis.createClient(config.port,config.host);
+	redisClient.auth(config.password, function() {
 	    console.log("redisAuth Connected!");
 	});
 }
