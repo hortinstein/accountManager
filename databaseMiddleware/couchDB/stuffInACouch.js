@@ -11,7 +11,7 @@ var cookies = '';
 module.exports = DB;
 
 DB.setup = function  (config) {
-	couch_host = 'http://' + config.host + ':' + config.port
+	var couch_host = 'http://' + config.host + ':' + config.port
 	DB.nano = require('nano')(couch_host)
 	  , username = config.username
 	  , userpass = config.password

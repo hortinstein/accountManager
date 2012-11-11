@@ -13,8 +13,7 @@ function accountManagerTests () {
                       username: 'rando', 
                       pass: 'rabbi123'      }
     before(function(done) {
-        AM.setup(config);
-        AM.buildDB(done); //builds the database
+        AM.setup(config, done); //setup builds the database now
     });
 
     it('should be able to signup', function(done){
