@@ -5,8 +5,8 @@
 ####A simple module to add a simple account management API and user model to your project, with multiple databases supported: 
 
 accountManager.js
-* couchDB (working)
-* redis (15/16 tests passed, not updating the passwords correctly)
+* couchDB 
+* redis 
 * riak (planned)
 * mongo (planned)
 * mySQL (planned)
