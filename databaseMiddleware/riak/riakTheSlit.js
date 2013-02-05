@@ -21,15 +21,15 @@ module.exports = DB;
 
 DB.update = function(newData, callback) {
 	//console.log(newData);
-	riakClient.get(bucket_name, newData.username, function(e, r, o) {
-		if(r) {
+	riakClient.get(bucket_name, newData.username, {}, function(e, r, o) {
+		if(o) {
 			var options = {
 				http_headers: {
 					'x-riak-index-username_bin': username,
 					'x-riak-index-username_email_bin': email
 				}
 			}
-			riakClient.put(bucket_name, newData.username, newData, function(e, r, o) {
+			riakClient.put(bucket_name, newData.username, newData, options, function(e, r, o) {
 				if(e) {
 					callback(e);
 				} else {
@@ -45,9 +45,9 @@ DB.update = function(newData, callback) {
 
 
 DB.insert = function(record, callback) {
-	riakClient.get(bucket_name, record.username, function(e, r, o) {
+	riakClient.get(bucket_name, record.username,{}, function(e, r, o) {
 		console.log(e,r,o);
-		if(r) {
+		if(!e) {
 			callback('record_exists');
 		} else {
 			DB.update(record,callback);
@@ -59,7 +59,8 @@ DB.insert = function(record, callback) {
 //getByUsername
 //in: username, callback 
 DB.getByUsername = function(username, callback) {
-	riakClient.get(bucket_name, username, function(e, r, o) {
+	riakClient.get(bucket_name, username,{}, function(e, r, o) {
+		console.log(o);
 		if (e) {
 			callback('user_not_found');
 		} else {
