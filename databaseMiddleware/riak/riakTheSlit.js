@@ -1,35 +1,34 @@
-var utility = require("./utility.js"); //store for functions not in the standard template
 var riak = require('riak');
-var request = require('request');
+var request = require('request'); //needed for delete hack
+
 var DB = {}; //object to export that will contain all of the templated functions 
-var userpass = '';
-var username = '';
-var bucket_name = '';
+var bucketName = '';
 var riakClient = '';
+var riakHostString = '';
 
 DB.setup = function(config) {
-	var riak_host_string = [config.riak_host + ':'+ config.riak_port];
-	console.log(riak_host_string);
+	riakHostString = [config.riak_host + ':' + config.riak_port];
 	var client_id = "acctMgr-client";
 	var pool_name = "acctMgr-pool";
-	bucket_name = config.database_name;
-	riakClient = new riak(riak_host_string, client_id, pool_name);
+	bucketName = config.database_name;
+	riakClient = new riak(riakHostString, client_id, pool_name);
 	riakClient.debug_mode = false;
 }
-module.exports = DB;
-
 
 DB.update = function(newData, callback) {
 	//console.log(newData);
-	riakClient.get(bucket_name, newData.username, {}, function(e, r, o) {
+	riakClient.get(bucketName, newData.username, {
+		'return_body': true
+	}, function(e, r, o) {
+		//console.log(newData.email)
 		if(o) {
 			var options = {
 				http_headers: {
-					'x-riak-index-username_bin': username,
-					'x-riak-index-username_email_bin': email
+					'x-riak-index-username_bin': o.username,
+					'x-riak-index-email_bin': newData.email
 				}
 			}
-			riakClient.put(bucket_name, newData.username, newData, options, function(e, r, o) {
+			riakClient.put(bucketName, o.username, newData, options, function(e, r, o) {
 				if(e) {
 					callback(e);
 				} else {
@@ -42,68 +41,72 @@ DB.update = function(newData, callback) {
 	});
 }
 
-
-
 DB.insert = function(record, callback) {
-	riakClient.get(bucket_name, record.username,{}, function(e, r, o) {
-		console.log(e,r,o);
-		if(!e) {
-			callback('record_exists');
+	riakClient.get(bucketName, record.username, {}, function(e, r, o) {
+		if(!o) {
+			var options = {
+				http_headers: {
+					'x-riak-index-username_bin': record.username,
+					'x-riak-index-email_bin': record.email
+				}
+			}
+			riakClient.put(bucketName, record.username, record, options, function(e, r, o) {
+				if(e) {
+					callback(e);
+				} else {
+					callback(null, 'ok');
+				}
+			});
 		} else {
-			DB.update(record,callback);
+			callback('record_exists');
 		}
-
 	});
 }
 
-//getByUsername
-//in: username, callback 
 DB.getByUsername = function(username, callback) {
-	riakClient.get(bucket_name, username,{}, function(e, r, o) {
-		console.log(o);
-		if (e) {
+	riakClient.get(bucketName, username, {}, function(e, r, o) {
+		if(!o) {
 			callback('user_not_found');
 		} else {
-			callback(null,o);
+			callback(null, o);
 		}
 	});
 }
 
-//getByEmail
-//in: username, callback 
 DB.getByEmail = function(email, callback) {
-	// var client = DB.nano.use(database_name); //sets it to the right database
-	// client.view('userAccount','email', {key: email}, function(e, r){ //checks to see if email is already registered
-	// 	if (r === null || r === undefined)
-	// 	{
-	// 		callback('user_not_found', null);
-	// 	}
-	// 	else if((r.rows).length === 0) //email already exists
-	// 	{
-	// 		callback('user_not_found',null);
-	// 	}
-	// 	else //email already exists
-	// 	{
-	// 		var id = r.rows[0].id;
-	// 		DB.getByUsername(id,callback);
-	// 	};
-	// });
+	request.get({
+		url: 'http://' + riakHostString + '/buckets/' + bucketName + '/index/email_bin/'+email,
+		json: true
+	}, function(e, r, b) {
+		//console.log(e,b.keys)
+		if(b.keys[0] === undefined ){
+			callback('user_not_found',null);
+		} else if (e) {
+			callback('user_not_found',null);
+		} else{
+			DB.getByUsername(b.keys[0],callback);	
+		}
+	});
 }
 
 //sets up the Db 
 DB.buildDB = function(callback) {
 	callback();
 }
+
 //destroy the DB created by accountManager
 DB.destroyDB = function(callback) { //because some men just want to watch the world burn
 	request.get({
-		url: 'http://' + riak_host + '/buckets/' + bucket + '/keys?keys=true',
+		url: 'http://' + riakHostString + '/buckets/' + bucketName + '/keys?keys=true',
 		json: true
 	}, function(e, r, b) {
-		for(key in b.keys) {
-			client.del(bucket, b.keys[key], function() {
+		for(var key in b.keys) {
+			//console.log(b.keys[key]);
+			riakClient.del(bucketName, b.keys[key], function() {
+				callback();
 			});
 		};
-		callback();
 	})
 };
+
+module.exports = DB;
