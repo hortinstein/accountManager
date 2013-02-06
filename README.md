@@ -7,9 +7,9 @@
 accountManager.js
 * couchDB 
 * redis 
-* riak (planned)
+* riak 
 * mongo (planned)
-* mySQL (planned)
+* postgres (planned)
 * ....and any others people would like to add (submit pull requests!)
 
 ####The following features are included:
