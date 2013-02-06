@@ -1,7 +1,5 @@
 #[accountManager.js 0.1]
 
-#####inital release, complete with basic account management functions
-
 ####A simple module to add a simple account management API and user model to your project, with multiple databases supported: 
 
 accountManager.js
