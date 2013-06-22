@@ -4,7 +4,7 @@ var DB = {}; //object to export that will contain all of the templated functions
 
 var userpass= '';
 var username = '';
-var	database_name = '';
+var database_name = '';
 var callback = '';
 var cookies = '';
 
