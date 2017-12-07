@@ -26,7 +26,7 @@ accountManager.js
 * [node.bcrypt.js](https://github.com/ncb000gt/node.bcrypt.js/) Password Cryptography
 * [EmailJS](http://github.com/eleith/emailjs) - Node.js > SMTP Server Middleware
 * [Moment.js](http://momentjs.com/) - Lightweight Date Library
-* [Mocha](http://visionmedia.github.com/mocha/) - Amazing testing library
+* [Mocha](http://mochajs.org/) - Amazing testing library
 * [Nano](https://github.com/dscape/nano) - Thin couchDB wrapper
 * [should.js](https://github.com/visionmedia/should.js) - BDD style test assertions
 
